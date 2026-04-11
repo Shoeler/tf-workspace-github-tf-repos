@@ -13,3 +13,8 @@ variable "oauth_token_id" {
   type        = string
   sensitive   = true
 }
+
+variable "tfe_project_name" {
+  description = "HCP Terraform project name under which workspaces will be created. Sourced from HCP Terraform workspace variable."
+  type        = string
+}

@@ -8,4 +8,5 @@ module "customer_test" {
   tfe_organization = var.tfe_organization
   oauth_token_id   = var.oauth_token_id
   repo_visibility  = "public"
+  tfe_project_name = var.tfe_project_name
 }
