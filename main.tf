@@ -7,4 +7,5 @@ module "customer_test" {
   github_org       = var.github_org
   tfe_organization = var.tfe_organization
   oauth_token_id   = var.oauth_token_id
+  repo_visibility  = "public"
 }
