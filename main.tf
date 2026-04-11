@@ -1,6 +1,6 @@
 module "customer_test" {
   source  = "app.terraform.io/schuyler-tfc/module-terraform-repo-workspace/github"
-  version = "1.0.1"
+  version = "~> 1.0"
 
   project          = "customer-test"
   team             = "hashi-se"
