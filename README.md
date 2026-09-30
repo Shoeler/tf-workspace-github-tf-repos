@@ -12,16 +12,61 @@ Each module call creates:
 
 - HCP Terraform workspace with the variables below configured
 - A VCS OAuth connection between HCP Terraform and GitHub
+- A GitHub token the GitHub provider can use to create repositories (see [Creating a GitHub Token](#creating-a-github-token))
 
 ## HCP Terraform Variables
 
-Set the following as workspace variables in HCP Terraform before running. Mark `oauth_token_id` as **sensitive**.
+Set the following as workspace variables in HCP Terraform before running. Mark `oauth_token_id` and `GITHUB_TOKEN` as **sensitive**.
 
 | Variable | Type | Sensitive | Description |
 |---|---|---|---|
 | `github_org` | Terraform | No | GitHub organization where repositories are created |
 | `tfe_organization` | Terraform | No | HCP Terraform organization where workspaces are created |
 | `oauth_token_id` | Terraform | **Yes** | VCS OAuth token ID linking HCP Terraform to GitHub |
+| `GITHUB_TOKEN` | Environment | **Yes** | GitHub token the GitHub provider uses to create and manage repositories |
+
+## Creating a GitHub Token
+
+The `github` provider block in [`versions.tf`](versions.tf) does not set a token, so the provider reads it from the `GITHUB_TOKEN` environment variable. The token must be able to create repositories, push branches, and manage branch protection in the organization set in `github_org`.
+
+### Fine-grained personal access token (recommended)
+
+1. In GitHub, go to **Settings → Developer settings → Personal access tokens → Fine-grained tokens** and click **Generate new token**.
+2. Give the token a name and an expiration.
+3. Under **Resource owner**, select the organization that matches `github_org`. If the organization is not listed, an organization owner needs to allow fine-grained tokens under the organization's **Settings → Personal access tokens**.
+4. Under **Repository access**, select **All repositories**. The token has to cover repositories that do not exist yet, so selecting individual repositories will not work.
+5. Under **Repository permissions**, set:
+
+   | Permission | Access | Used for |
+   |---|---|---|
+   | Administration | Read and write | Creating and deleting repositories, branch protection |
+   | Contents | Read and write | Creating the `main` and `dev` branches |
+   | Metadata | Read-only | Selected automatically |
+
+6. Click **Generate token** and copy the value. GitHub only shows it once.
+7. If the organization requires approval for fine-grained tokens, an organization owner must approve the request before the token works.
+
+### Classic personal access token
+
+If fine-grained tokens are not enabled for the organization, create a classic token instead:
+
+1. Go to **Settings → Developer settings → Personal access tokens → Tokens (classic)** and click **Generate new token (classic)**.
+2. Select the `repo` scope. Add `delete_repo` if you want `terraform destroy` to be able to remove repositories.
+3. Click **Generate token** and copy the value.
+4. If the organization enforces SAML single sign-on, click **Configure SSO** next to the token and authorize it for the organization.
+
+### Adding the token to HCP Terraform
+
+1. Open the workspace for this root module in HCP Terraform and go to **Variables**.
+2. Under **Workspace variables**, click **Add variable**.
+3. Select **Environment variable**, set the key to `GITHUB_TOKEN`, and paste the token as the value.
+4. Check **Sensitive** and save.
+
+For a local run, export the token in your shell instead:
+
+```shell
+export GITHUB_TOKEN=<your token>
+```
 
 ## Usage
 
