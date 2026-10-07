@@ -78,7 +78,7 @@ The VCS provider must be the OAuth type, **GitHub.com (Custom)**. The preconfigu
 
 You need permission to manage VCS settings for the HCP Terraform organization. Keep HCP Terraform and GitHub open in separate tabs, because the steps move between them. These steps follow HashiCorp's [GitHub.com (OAuth) guide](https://developer.hashicorp.com/terraform/cloud-docs/vcs/github).
 
-1. In HCP Terraform, choose **Settings** from the organization sidebar, then click **Providers**. Click **Add a VCS provider**.
+1. In HCP Terraform, choose **Settings** from the organization sidebar, then click **Providers** under **Version Control**. Click **Add a VCS provider**.
 2. Select **GitHub**, then **GitHub.com (Custom)**. Leave this page open.
 3. Click the link on that page to register a new OAuth application, or open `https://github.com/settings/applications/new` in GitHub.
 4. Fill in the GitHub form and click **Register application**:
@@ -92,15 +92,15 @@ You need permission to manage VCS settings for the HCP Terraform organization. K
 
 5. On the application page in GitHub, copy the **Client ID**, then click **Generate a new client secret** and copy the secret. GitHub only shows it once.
 6. Back in HCP Terraform, optionally give the provider a **Name**, paste the **Client ID** and **Client Secret**, and click **Connect and continue**.
-7. GitHub asks you to authorize the application. Click **Request** or **Grant** next to the organization set in `github_org`, then click **Authorize**.
-8. On the **Advanced settings** step, leave the scope at **All Projects** unless you want to limit the provider to selected projects. Make sure the project in `tfe_project_name` is covered. Click **Skip and finish** unless you need an SSH keypair for SSH-based Git submodules.
-9. If the GitHub organization uses OAuth app access restrictions, an organization owner has to approve the request before HCP Terraform can reach the organization's repositories.
+7. GitHub shows an authorization page that lists the organizations your account belongs to. If there is a **Request** button next to the organization set in `github_org`, click it. Then click **Authorize**.
+8. On the **Advanced settings** step, leave the scope at **All Projects** unless you want to limit the provider to selected projects. Make sure the project in `tfe_project_name` is covered. Click **Skip and finish** unless you need an SSH keypair for SSH-based Git submodules. Most organizations do not need one.
+9. If you clicked **Request** in step 7, the GitHub organization uses OAuth app access restrictions. An organization owner has to approve the request before HCP Terraform can reach the organization's repositories.
 
 The GitHub account that authorizes the application in step 7 must have admin access to the repositories this module creates, because creating webhooks requires admin permissions.
 
 ### Finding the token ID
 
-After the provider is added, go back to **Settings → Providers**. The **OAuth Token ID** column shows a value such as `ot-hmAyP66qk2AMVdbJ`. That value is `oauth_token_id`.
+After the provider is added, go back to **Settings → Version Control → Providers**. The **OAuth Token ID** column shows a value such as `ot-hmAyP66qk2AMVdbJ`. That value is `oauth_token_id`.
 
 You can also read it from the API, using an HCP Terraform API token. First list the organization's OAuth clients to get the client ID, which starts with `oc-`:
 
