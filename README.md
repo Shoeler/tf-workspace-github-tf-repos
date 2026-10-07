@@ -22,6 +22,7 @@ Set the following as workspace variables in HCP Terraform before running. Mark `
 |---|---|---|---|
 | `github_org` | Terraform | No | GitHub organization where repositories are created |
 | `tfe_organization` | Terraform | No | HCP Terraform organization where workspaces are created |
+| `tfe_project_name` | Terraform | No | HCP Terraform project where workspaces are created |
 | `oauth_token_id` | Terraform | **Yes** | VCS OAuth token ID linking HCP Terraform to GitHub |
 | `GITHUB_TOKEN` | Environment | **Yes** | GitHub token the GitHub provider uses to create and manage repositories |
 
