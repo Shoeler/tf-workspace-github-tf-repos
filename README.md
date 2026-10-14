@@ -155,3 +155,4 @@ terraform apply
 | Module call | Project | Team | Repo name |
 |---|---|---|---|
 | `customer_test` | `customer-test` | `hashi-se` | `hashi-se-customer-test` |
+| `platform_demo_app` | `demo-app` | `platform` | `platform-demo-app` |
