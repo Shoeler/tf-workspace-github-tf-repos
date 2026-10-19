@@ -33,7 +33,7 @@ module "migration_test_a" {
   github_org       = var.github_org
   tfe_organization = var.tfe_organization
   oauth_token_id   = var.oauth_token_id
-  repo_visibility  = "private"
+  repo_visibility  = "public"
   tfe_project_name = var.tfe_project_name
 }
 
@@ -46,6 +46,6 @@ module "migration_test_b" {
   github_org       = var.github_org
   tfe_organization = var.tfe_organization
   oauth_token_id   = var.oauth_token_id
-  repo_visibility  = "private"
+  repo_visibility  = "public"
   tfe_project_name = var.tfe_project_name
 }
