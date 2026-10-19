@@ -10,7 +10,7 @@ Each module call creates one GitHub repo named `<team>-<project>`, `main` and `d
 
 ## Layout
 
-- `main.tf`: one `module` block per repo/workspace pair. Currently the only call (`customer_test`) is commented out; it was disabled to destroy the resources for testing (commit `b2c1ad5`). Uncomment or add a block to provision.
+- `main.tf`: one `module` block per repo/workspace pair. `platform_demo_app` is active. `customer_test` is commented out; it was disabled to destroy its resources for testing (commit `b2c1ad5`). Uncomment or add a block to provision.
 - `variables.tf`: `github_org`, `tfe_organization`, `tfe_project_name`, and sensitive `oauth_token_id`. All are set as HCP Terraform workspace variables, not in tfvars.
 - `versions.tf`: `cloud {}` backend block, provider version pins (`integrations/github ~> 6.0`, `hashicorp/tfe ~> 0.57`), and the `github` provider configured with `owner = var.github_org`. The `cloud` block still contains `<TFC_ORGANIZATION_PLACEHOLDER>` and `<TFC_WORKSPACE_NAME_PLACEHOLDER>`; fill these before running.
 
