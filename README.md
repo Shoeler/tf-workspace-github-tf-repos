@@ -156,3 +156,5 @@ terraform apply
 |---|---|---|---|
 | `customer_test` | `customer-test` | `hashi-se` | `hashi-se-customer-test` |
 | `platform_demo_app` | `demo-app` | `platform` | `platform-demo-app` |
+| `migration_test_a` | `migration-test-a` | `platform` | `platform-migration-test-a` |
+| `migration_test_b` | `migration-test-b` | `platform` | `platform-migration-test-b` |
