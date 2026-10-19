@@ -35,11 +35,18 @@ Running locally requires `GITHUB_TOKEN` exported in the shell (the `github` prov
 
 ## Working style
 
-Always delegate work to background subagents via the Agent tool rather than doing it inline in the main thread. Choose the agent type that fits the task:
+Delegate to background subagents via the Agent tool for exploration, review, and multi-step or multi-file work. Keep small, obvious edits inline: a one-line change to `main.tf`, `variables.tf`, or `versions.tf` is cheaper to do directly than to brief an agent for.
+
+Agent choice:
 
 - Read-only exploration or locating code: `Explore` or `caveman:cavecrew-investigator`.
-- Small bounded edits to one or two `.tf` files (`main.tf`, `variables.tf`, `versions.tf`): `tf-module-fixer` or `caveman:cavecrew-builder`.
+- Bounded edits to one or two `.tf` files that need `terraform fmt` and `validate` to confirm: `tf-module-fixer` or `caveman:cavecrew-builder`.
 - Reviewing a diff or branch: `caveman:cavecrew-reviewer`.
-- Anything larger or multi-step: `general-purpose`, or `fork` when the agent needs the current conversation context.
+- Larger or multi-step work: `general-purpose`.
 
-Run agents in the background, launch independent agents in parallel, and relay their results to the user, since the agent's final report is not shown directly. Trivial one-line answers that need no tool calls may be answered directly.
+Sharing context with agents:
+
+- A fresh agent starts with no conversation memory. Front-load the prompt with the goal, exact files and line numbers, facts already established (for example, `customer_test` is intentionally commented out), constraints (no push, keep the `~> 1.0` pin), and the output shape wanted.
+- For follow-up work on the same task, continue the existing agent with `SendMessage` instead of spawning a new one; it keeps its context and skips the cold start.
+- Use `fork` only when the agent genuinely needs the conversation history. It copies the full context, so it is not cheaper than a fresh agent with a good brief.
+- Agent reports are not shown to the user; relay what matters. Launch independent agents in parallel.
