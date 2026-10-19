@@ -1,0 +1,21 @@
+{
+  "mcpServers": {
+    "terraform": {
+      "command": "sh",
+      "args": [
+        "-c",
+        "[ -n \"$TFE_TOKEN\" ] || TFE_TOKEN=$(python3 -c \"import json,os;print(json.load(open(os.path.expanduser('~/.terraform.d/credentials.tfrc.json')))['credentials']['app.terraform.io']['token'])\" 2>/dev/null); export TFE_TOKEN; exec terraform-mcp-server stdio"
+      ],
+      "env": {
+        "TFE_ADDRESS": "https://app.terraform.io"
+      }
+    },
+    "github": {
+      "command": "sh",
+      "args": [
+        "-c",
+        "[ -n \"$GITHUB_PERSONAL_ACCESS_TOKEN\" ] || GITHUB_PERSONAL_ACCESS_TOKEN=$(gh auth token); export GITHUB_PERSONAL_ACCESS_TOKEN; exec github-mcp-server stdio"
+      ]
+    }
+  }
+}

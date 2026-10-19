@@ -10,7 +10,8 @@ Each module call creates one GitHub repo named `<team>-<project>`, `main` and `d
 
 ## Layout
 
-- `main.tf`: one `module` block per repo/workspace pair. `platform_demo_app` is active. `customer_test` is commented out; it was disabled to destroy its resources for testing (commit `b2c1ad5`). Uncomment or add a block to provision.
+- `main.tf`: a `local.repos` map with one entry per repo/workspace pair, consumed by a single `module "repo"` with `for_each`. `platform_demo_app`, `migration_test_a`, and `migration_test_b` are active. `customer_test` is commented out; it was disabled to destroy its resources for testing (commit `b2c1ad5`). The `moved` blocks map the pre-refactor standalone module addresses onto `module.repo["<key>"]`; keep them until every workspace has applied past the refactor.
+- `outputs.tf`: `repo_urls` and `workspace_urls` maps built from `module.repo`, so new entries in `local.repos` show up without edits.
 - `variables.tf`: `github_org`, `tfe_organization`, `tfe_project_name`, and sensitive `oauth_token_id`. All are set as HCP Terraform workspace variables, not in tfvars.
 - `versions.tf`: `cloud {}` backend block, provider version pins (`integrations/github ~> 6.0`, `hashicorp/tfe ~> 0.57`), and the `github` provider configured with `owner = var.github_org`. The `cloud` block still contains `<TFC_ORGANIZATION_PLACEHOLDER>` and `<TFC_WORKSPACE_NAME_PLACEHOLDER>`; fill these before running.
 
@@ -28,7 +29,7 @@ Running locally requires `GITHUB_TOKEN` exported in the shell (the `github` prov
 
 ## Conventions
 
-- Add a new repo by adding a `module` block in `main.tf` with `project`, `team`, `repo_visibility`, and the four pass-through variables, then add a row to the "Repos" table in `README.md`.
+- Add a new repo by adding an entry to `local.repos` in `main.tf` with `project`, `team`, and `repo_visibility` (use `public`; rulesets on private repos need GitHub Pro on this account), then add a row to the "Repos" table in `README.md`.
 - Pin the module with `version = "~> 1.0"` style constraints; minor bumps are allowed on purpose (commit `d5d145f`).
 - The README's "Usage" section still describes `<MODULE_SOURCE_PLACEHOLDER>` and `<MODULE_VERSION_PLACEHOLDER>` in `main.tf`; those were replaced with real values in `93013b5`, so the README is slightly stale on that point.
 - The README is the authoritative setup guide for the GitHub token and VCS OAuth token ID (`ot-...`); update it when provider or variable requirements change.

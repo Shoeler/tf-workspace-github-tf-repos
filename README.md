@@ -152,9 +152,18 @@ terraform apply
 
 ## Repos
 
-| Module call | Project | Team | Repo name |
+Each entry in `local.repos` in [`main.tf`](main.tf) is one module instance. The key is the instance name, and the GitHub repo is named `<team>-<project>`. Adding an entry provisions a new repo plus `main` and `dev` workspaces; the `repo_urls` and `workspace_urls` outputs include every entry automatically.
+
+| Key | Project | Team | Repo name |
 |---|---|---|---|
-| `customer_test` | `customer-test` | `hashi-se` | `hashi-se-customer-test` |
+| `customer_test` (commented out) | `customer-test` | `hashi-se` | `hashi-se-customer-test` |
 | `platform_demo_app` | `demo-app` | `platform` | `platform-demo-app` |
 | `migration_test_a` | `migration-test-a` | `platform` | `platform-migration-test-a` |
 | `migration_test_b` | `migration-test-b` | `platform` | `platform-migration-test-b` |
+
+## Outputs
+
+| Name | Description |
+|---|---|
+| `repo_urls` | Map of key to `[web URL, SSH clone URL, HTTPS clone URL]`. |
+| `workspace_urls` | Map of key to `[main workspace URL, dev workspace URL]`. |
